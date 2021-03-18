@@ -3,52 +3,85 @@
   <!--<div class="md-layout md-gutter md-alignment-center">-->
   <div>
     <!--選題-->
-    <div style="width: 50%;margin:0 auto;">
+    <div class="md-layout md-size-90">
       <div class="md-layout">
-        <div class="md-layout-item">
+        <div class="md-layout-item" style="justify-content: flex-end;">
 
-          <md-button class="md-raised" @click="select()">選題開始</md-button>
+          <md-button class="md-raised button-style pink" @click="select()">選題開始</md-button>
 
         </div>
 
-        <div class="md-layout-item">
+        <div class="md-layout-item item-right-style">
           <label>題目中譯:</label> <b>{{chinese_translate}}</b>
         </div>
 
-        <div class="md-layout-item">
+        <div class="md-layout-item item-right-style">
           <b style="color: red">{{part_of_speech}}</b>
         </div>
 
       </div>
     </div>
+
     <!--輸入-->
-    <div class="md-layout">
-      <label>請輸入英譯:</label>
-      <md-input type="text" v-model="english_translate" name="en_msg"></md-input>
+    <div>
+      <div class="md-layout">
+        <div class="md-layout-item " style="justify-content: flex-end;">
 
-      <md-button class="md-raised" @click="answer()" v-if='showAnswer'>解答
-      </md-button>
+          <span>請輸入英譯:</span>
+          <md-input type="text" v-model="english_translate" name="en_msg"></md-input>
 
-      <md-button class="md-raised" @click="tip()" :disabled="showAnswer">提示</md-button>
+        </div>
 
-      <div>
+        <div class="md-layout-item">
+          <md-button class="md-raised button-style pink" @click="answer()" v-if='showAnswer'>解答
+          </md-button>
+        </div>
 
-        <md-dialog-alert
-          :md-active.sync="right_answer_alert"
-          md-content="Right answer"
-          md-confirm-text="Cool!"/>
+        <div class="md-layout-item">
+          <md-button class="md-raised button-style pink" @click="tip()"
+                     :class="{pink: isClickAnswer, gray: !isClickAnswer || !chinese_translate}"
+                     :disabled="!isClickAnswer || !chinese_translate">提示
+          </md-button>
+        </div>
 
-        <md-dialog-alert
-          :md-active.sync="wrong_answer_alert"
-          md-title="Wrong"
-          md-content="Wrong answer!"/>
+        <!--送出後的彈窗-->
+        <div>
+
+          <md-dialog-alert
+            :md-active.sync="right_answer_alert"
+            md-content="Right answer"
+            md-confirm-text="Cool!"/>
+
+          <md-dialog-alert
+            :md-active.sync="wrong_answer_alert"
+            md-title="Wrong"
+            md-content="Wrong answer!"/>
+        </div>
+
+        <div class="md-layout-item">
+          <md-button class="md-raised md-accent button-style pink"
+                     :class="{pink: isClickAnswer, gray: !isClickAnswer || !english_translate}"
+                     @click="send()" :disabled="!isClickAnswer || !english_translate">送出
+          </md-button>
+        </div>
+
+        <div class="md-layout-item">
+          <md-button class="md-raised button-style pink" @click="cooperation()">合作洽談</md-button>
+        </div>
+
+        <!--合作洽談後的彈窗-->
+        <div>
+
+          <md-dialog-prompt
+            :md-active.sync="cooperation_active"
+            v-model="cooperation_value"
+            md-title="Memo"
+            md-input-maxlength="50"
+            md-input-placeholder="Type your content"
+            md-confirm-text="Done"/>
+        </div>
+
       </div>
-
-      <md-button class="md-raised md-accent" @click="send()" :disabled="showAnswer">送出</md-button>
-
-      <md-button class="md-raised" @click="cooperation()">合作洽談</md-button>
-
-      <!--<md-button class="md-raised" @click="hide()">hide</md-button>-->
     </div>
 
     <!--內容-->
@@ -98,31 +131,32 @@
           </md-tab>
 
           <md-tab md-label="出題標準">
-            <div>
-
-              <md-content>
-                <md-checkbox v-model="accept_show_ckx" value="1"></md-checkbox>
-              </md-content>
-              <md-content><span>允許出現</span></md-content>
-              <md-content>
+            <div class="md-layout">
+              <div class="md-layout-item">
+                <md-checkbox v-model="accept_show_ckx" value="1">允許出現</md-checkbox>
+              </div>
+              <div class="md-layout-item">
                 <md-field>
                   <md-select v-model="accept_show_count" name="accept_show" id="accept_show"
-                             :disabled="!accept_show_ckx">
-                    <md-option :value="item" v-for='(item) in accept_count_list'> {{item}}</md-option>
+                             :disabled="!accept_show_ckx" >
+                    <md-option :value="item" v-for='(item) in accept_count_list' style="text-align: center"> {{item}}
+                    </md-option>
                   </md-select>
                 </md-field>
-              </md-content>
-              <md-content><span>次的題目</span></md-content>
+              </div>
+              <div class="md-layout-item">
+                <span>次的題目</span>
+              </div>
 
             </div>
-            <div>
+            <div class="md-layout">
 
-              <md-content>
-                <md-checkbox v-model="accept_error_ckx" value="0"></md-checkbox>
-              </md-content>
-              <md-content><span>允許答錯</span></md-content>
+              <div class="md-layout-item">
+                <md-checkbox v-model="accept_error_ckx" value="0">允許答錯</md-checkbox>
 
-              <md-content>
+              </div>
+
+              <div class="md-layout-item">
                 <md-field>
                   <md-select v-model="accept_error_count" name="accept_error" id="accept_error"
                              :disabled="!accept_error_ckx">
@@ -130,8 +164,12 @@
                     </md-option>
                   </md-select>
                 </md-field>
-              </md-content>
-              <md-content><span>次的題目</span></md-content>
+
+              </div>
+
+              <div class="md-layout-item">
+                <span>次的題目</span>
+              </div>
 
             </div>
 
@@ -149,6 +187,11 @@
 
     </div>
 
+    <!--隱藏按鈕-->
+    <!--<div class="md-layout">-->
+    <!--<md-button class="md-raised" @click="hide()">hide</md-button>-->
+    <!--</div>-->
+
   </div>
 
 </template>
@@ -164,12 +207,15 @@ export default {
       answer_word: '',
       accept_count_list: [],
       isSelect: 0,
+      isClickAnswer: true,
       isSend: 0,
       isWrong: true,
-      accept_show_ckx: true,
-      accept_error_ckx: true,
+      accept_show_ckx: false,
+      accept_error_ckx: false,
       accept_show_one_week_ckx: false,
       showAnswer: false,
+      cooperation_active: false,
+      cooperation_value: null,
       right_answer_alert: false,
       wrong_answer_alert: false,
       showSettingDialog: false,
@@ -202,7 +248,17 @@ export default {
       }
 
       this.chinese_translate = this.questionChineseTranslateList.join(';')
-      // this.isSelect = 1
+
+      this.isSelect = 1
+
+      if (this.isSelect) {
+        this.showAnswer = false
+        this.isClickAnswer = true
+        this.english_translate = ''
+        this.content_object.example.content = ''
+        this.content_object.source.content = ''
+        this.content_object.note.content = ''
+      }
     },
     tip () {
       this.answer_word = 'vendor'
@@ -217,10 +273,18 @@ export default {
       } else {
         this.statistics_object.right_cnt.cnt++
         this.right_answer_alert = true
+
+        this.content_object.example.content = 'Vendors are busy attracting the attention of children.'
+
+        this.content_object.source.content = 'http://www.google.com.tw'
+
+        this.content_object.note.content = 'note'
       }
     },
     answer () {
       this.english_translate = this.answer_word
+
+      this.isClickAnswer = false
 
       this.content_object.example.content = 'Vendors are busy attracting the attention of children.'
 
@@ -232,7 +296,7 @@ export default {
       this.showSettingDialog = true
     },
     cooperation () {
-
+      this.cooperation_active = true
     }
 
   },
@@ -246,16 +310,20 @@ export default {
 
   .md-layout-item {
     height: 40px;
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
     transition: .3s $md-transition-stand-timing;
+    padding: 0px 0px 10px 10px;
 
     &:after {
-      width: 100%;
-      height: 100%;
-      display: block;
+      /*width: 100%;*/
+      /*height: 100%;*/
+      display: flex;
       background: md-get-palette-color(purple, 200);
       content: " ";
+
     }
   }
 
@@ -272,11 +340,20 @@ export default {
     color: #fff !important;
   }
 
+  .gray {
+    background-color: #b5b5b5 !important;
+    color: #fff !important;
+  }
+
   .button-style {
-    height: 50px;
-    margin: 0px 0px 0px 20px !important;
+    height: 40px;
+    margin: 0 0 0 20px !important;
     border-radius: 4px;
-    min-width: 120px;
+    min-width: 100px;
+  }
+
+  .item-right-style {
+    justify-content: flex-start;
   }
 
   .md-checkbox {
@@ -292,7 +369,7 @@ export default {
   }
 
   .md-list {
-    width: 320px;
+    width: 50%;
     max-width: 100%;
     display: inline-block;
     vertical-align: top;
@@ -302,6 +379,13 @@ export default {
 
   .md-dialog /deep/ .md-dialog-container {
     max-width: 768px;
+  }
+
+  input[type="text"] {
+    border-radius: 5px;
+    border: 1px solid #999999;
+    padding: 0 10px;
+    font-size: 18px;
   }
 
 </style>
