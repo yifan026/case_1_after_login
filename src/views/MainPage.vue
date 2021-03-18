@@ -1,26 +1,35 @@
 <template>
 
-  <div class="md-layout md-gutter">
+  <!--<div class="md-layout md-gutter md-alignment-center">-->
+  <div>
+    <!--選題-->
+    <div style="width: 50%;margin:0 auto;">
+      <div class="md-layout">
+        <div class="md-layout-item">
 
-    <div class="md-layout-item  md-alignment-top-left">
-      <!--<md-button class="md-raised button-style pink" @click="greet()">選題開始</md-button>-->
+          <md-button class="md-raised" @click="select()">選題開始</md-button>
 
-      <md-button class="md-raised button-style pink" @click="select()">選題開始</md-button>
-      <!--<h1>{{message}}</h1>-->
+        </div>
 
-      <label>題目中譯:</label>
-      <b>{{chinese_translate}}</b>
-      <b style="color: red">{{part_of_speech}}</b>
+        <div class="md-layout-item">
+          <label>題目中譯:</label> <b>{{chinese_translate}}</b>
+        </div>
+
+        <div class="md-layout-item">
+          <b style="color: red">{{part_of_speech}}</b>
+        </div>
+
+      </div>
     </div>
-
-    <div class="md-layout-item">
+    <!--輸入-->
+    <div class="md-layout">
       <label>請輸入英譯:</label>
       <md-input type="text" v-model="english_translate" name="en_msg"></md-input>
 
-      <md-button class="md-raised button-style pink" @click="answer()" v-if='!showAnswer'>解答
+      <md-button class="md-raised" @click="answer()" v-if='showAnswer'>解答
       </md-button>
 
-      <md-button class="md-raised button-style pink" @click="tip()">提示</md-button>
+      <md-button class="md-raised" @click="tip()" :disabled="showAnswer">提示</md-button>
 
       <div>
 
@@ -35,23 +44,22 @@
           md-content="Wrong answer!"/>
       </div>
 
-      <md-button class="md-raised button-style pink" @click="send()">送出</md-button>
+      <md-button class="md-raised md-accent" @click="send()" :disabled="showAnswer">送出</md-button>
 
-      <md-button class="md-raised button-style pink" @click="cooperation()">合作洽談</md-button>
+      <md-button class="md-raised" @click="cooperation()">合作洽談</md-button>
 
-      <!--<md-button class="md-raised button-style pink" @click="hide()">hide</md-button>-->
+      <!--<md-button class="md-raised" @click="hide()">hide</md-button>-->
     </div>
 
-    <div class="md-layout-item">
+    <!--內容-->
+    <div class="md-layout">
       <!--<md-content class="md-primary">-->
 
       <md-list>
         <md-subheader>內容</md-subheader>
-        <md-list-item>
-          <div v-for="(value) in content_object">
+        <md-list-item v-for="(value) in content_object">
 
-            <span class="md-list-item-text">{{value.name}} : {{value.content}}</span>
-          </div>
+          <span class="md-list-item-text">{{value.name}} : {{value.content}}</span>
 
         </md-list-item>
       </md-list>
@@ -60,53 +68,71 @@
 
     </div>
 
-    <div>
+    <!--統計-->
+    <div class="md-layout">
 
       <md-list>
         <md-subheader>統計</md-subheader>
 
-        <md-list-item>
+        <md-list-item v-for="(value) in statistics_object">
 
-          <div v-for="(value) in statistics_object">
-
-            <span class="md-list-item-text">{{value.name}} : {{value.cnt}}</span>
-          </div>
+          <span class="md-list-item-text">{{value.name}} : {{value.cnt}}</span>
 
         </md-list-item>
       </md-list>
 
     </div>
 
-    <div class="md-layout-item">
+    <!--設定-->
+    <div class="md-layout">
 
       <md-dialog :md-active.sync="showSettingDialog">
         <md-dialog-title>Settings</md-dialog-title>
 
         <md-tabs md-dynamic-height>
           <md-tab md-label="設定">
-            <div>
-              <md-checkbox value="1">只出現近一星期題案</md-checkbox>
+            <div class="md-layout-item">
+              <md-checkbox v-model="accept_show_one_week_ckx" value="2">只出現近一星期題案</md-checkbox>
             </div>
 
           </md-tab>
 
           <md-tab md-label="出題標準">
             <div>
-              <md-checkbox v-model="accept_show_ckx" value="1">允許出現</md-checkbox>
 
-              <md-select v-model="accept_show_count" name="accept_show" id="accept_show">
-                <md-option :value="item" v-for='(item) in accept_count_list' v-if="accept_show_ckx"> {{item}}
-                </md-option>
-              </md-select>
-              次的題目
+              <md-content>
+                <md-checkbox v-model="accept_show_ckx" value="1"></md-checkbox>
+              </md-content>
+              <md-content><span>允許出現</span></md-content>
+              <md-content>
+                <md-field>
+                  <md-select v-model="accept_show_count" name="accept_show" id="accept_show"
+                             :disabled="!accept_show_ckx">
+                    <md-option :value="item" v-for='(item) in accept_count_list'> {{item}}</md-option>
+                  </md-select>
+                </md-field>
+              </md-content>
+              <md-content><span>次的題目</span></md-content>
 
-              <md-checkbox v-model="accept_error_ckx" value="0">允許答錯</md-checkbox>
+            </div>
+            <div>
 
-              <md-select v-model="accept_error_count" name="accept_error" id="accept_error">
-                <md-option :value="item" v-for='(item) in accept_count_list' v-if="accept_error_ckx"> {{item}}
-                </md-option>
-              </md-select>
-              次的題目
+              <md-content>
+                <md-checkbox v-model="accept_error_ckx" value="0"></md-checkbox>
+              </md-content>
+              <md-content><span>允許答錯</span></md-content>
+
+              <md-content>
+                <md-field>
+                  <md-select v-model="accept_error_count" name="accept_error" id="accept_error"
+                             :disabled="!accept_error_ckx">
+                    <md-option :value="item" v-for='(item) in accept_count_list'> {{item}}
+                    </md-option>
+                  </md-select>
+                </md-field>
+              </md-content>
+              <md-content><span>次的題目</span></md-content>
+
             </div>
 
           </md-tab>
@@ -136,12 +162,13 @@ export default {
       part_of_speech: '',
       english_translate: '',
       answer_word: '',
-      accept_count_list: Array.from({ length: 10 }, (_, i) => i + 1),
+      accept_count_list: [],
       isSelect: 0,
       isSend: 0,
       isWrong: true,
-      accept_show_ckx: false,
+      accept_show_ckx: true,
       accept_error_ckx: true,
+      accept_show_one_week_ckx: false,
       showAnswer: false,
       right_answer_alert: false,
       wrong_answer_alert: false,
@@ -156,9 +183,12 @@ export default {
         source: { name: '題目出處', content: '' },
         note: { name: '備註', content: '' }
       },
-      accept_show_count: 0,
-      accept_error_count: 0
+      accept_show_count: 1,
+      accept_error_count: 1
     }
+  },
+  created: function () {
+    this.accept_count_list = Array.from({ length: 10 }, (_, i) => i + 1)
   },
   methods: {
     select () {
@@ -182,7 +212,7 @@ export default {
     send () {
       if (this.isWrong) {
         this.statistics_object.error_cnt.cnt++
-
+        this.showAnswer = true
         this.wrong_answer_alert = true
       } else {
         this.statistics_object.right_cnt.cnt++
@@ -212,27 +242,26 @@ export default {
 
 <style lang="scss" scoped>
 
-  @import "~vue-material/dist/theme/engine";
+  @import "~vue-material/src/components/MdAnimation/variables";
 
   .md-layout-item {
-    height: 100px;
+    height: 40px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    transition: .3s $md-transition-stand-timing;
 
-    &:nth-child(1) {
-      background: md-get-palette-color(grey, 300);
-    }
-
-    &:nth-child(2) {
-      background: md-get-palette-color(grey, 400);
-    }
-
-    &:nth-child(3) {
-      background: md-get-palette-color(grey, 500);
+    &:after {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: md-get-palette-color(purple, 200);
+      content: " ";
     }
   }
 
   .md-content {
-    width: 200px;
-    height: 200px;
+    width: 25%;
+    height: 50%;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -263,16 +292,16 @@ export default {
   }
 
   .md-list {
-    width: 320px;
+    width: 100%;
     max-width: 100%;
     display: inline-block;
     vertical-align: top;
-    /*border: 1px solid rgba(#000, .12);*/
+    border: 1px solid rgba(#000, .12);
     list-style-type: none;
   }
 
   .md-dialog /deep/ .md-dialog-container {
-    max-width: 768px;
+    max-width: 50%;
   }
 
 </style>
