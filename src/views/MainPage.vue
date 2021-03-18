@@ -5,14 +5,14 @@
     <!--選題-->
     <div class="md-layout md-size-90">
       <div class="md-layout">
-        <div class="md-layout-item" style="justify-content: flex-end;">
+        <div class="md-layout-item item-end-style">
 
           <md-button class="md-raised button-style pink" @click="select()">選題開始</md-button>
 
         </div>
 
         <div class="md-layout-item item-right-style">
-          <label>題目中譯:</label> <b>{{chinese_translate}}</b>
+          <span>題目中譯 : </span> <b>{{chinese_translate}}</b>
         </div>
 
         <div class="md-layout-item item-right-style">
@@ -23,12 +23,14 @@
     </div>
 
     <!--輸入-->
-    <div>
+    <div class="md-layout md-size-90">
       <div class="md-layout">
-        <div class="md-layout-item " style="justify-content: flex-end;">
+        <div class="md-layout-item item-end-style">
+          <span>請輸入英譯 : </span>
+        </div>
 
-          <span>請輸入英譯:</span>
-          <md-input type="text" v-model="english_translate" name="en_msg"></md-input>
+        <div class="md-layout-item ">
+          <md-input type="text" v-model="english_translate" name="en_msg" :disabled="!isSelect"></md-input>
 
         </div>
 
@@ -90,9 +92,13 @@
 
       <md-list>
         <md-subheader>內容</md-subheader>
-        <md-list-item v-for="(value) in content_object">
+        <md-list-item v-for="(value,index) in content_object" :key="index">
 
-          <span class="md-list-item-text">{{value.name}} : {{value.content}}</span>
+          <div class="md-list-item-text" style="white-space: normal;padding-bottom: 1rem;">
+
+            <span><b>{{value.name}} : </b> {{value.content}}</span>
+
+          </div>
 
         </md-list-item>
       </md-list>
@@ -107,9 +113,10 @@
       <md-list>
         <md-subheader>統計</md-subheader>
 
-        <md-list-item v-for="(value) in statistics_object">
+        <md-list-item v-for="(value,index) in statistics_object" :key="index">
 
-          <span class="md-list-item-text">{{value.name}} : {{value.cnt}}</span>
+          <span class="md-list-item-text"
+                v-bind:style="[index.includes('answer') ? index.includes('right') ? {color:'blue'}:{color:'red'}:{color:'black'}]">{{value.name }} : {{value.cnt}}</span>
 
         </md-list-item>
       </md-list>
@@ -138,8 +145,9 @@
               <div class="md-layout-item">
                 <md-field>
                   <md-select v-model="accept_show_count" name="accept_show" id="accept_show"
-                             :disabled="!accept_show_ckx" >
-                    <md-option :value="item" v-for='(item) in accept_count_list' style="text-align: center"> {{item}}
+                             :disabled="!accept_show_ckx">
+                    <md-option :value="item" v-for='(item, index) in accept_count_list' :key="index"
+                               style="text-align: center"> {{item}}
                     </md-option>
                   </md-select>
                 </md-field>
@@ -160,7 +168,7 @@
                 <md-field>
                   <md-select v-model="accept_error_count" name="accept_error" id="accept_error"
                              :disabled="!accept_error_ckx">
-                    <md-option :value="item" v-for='(item) in accept_count_list'> {{item}}
+                    <md-option :value="item" v-for='(item, index) in accept_count_list' :key="index"> {{item}}
                     </md-option>
                   </md-select>
                 </md-field>
@@ -183,14 +191,14 @@
         </md-dialog-actions>
       </md-dialog>
 
-      <md-button class="md-primary md-raised" @click="setting()">設定</md-button>
+      <div class="md-layout">
+        <md-button class="md-primary md-raised" @click="setting()">設定</md-button>
+
+        <!--隱藏按鈕-->
+        <!--<md-button class="md-raised" @click="hide()">hide</md-button>-->
+      </div>
 
     </div>
-
-    <!--隱藏按鈕-->
-    <!--<div class="md-layout">-->
-    <!--<md-button class="md-raised" @click="hide()">hide</md-button>-->
-    <!--</div>-->
 
   </div>
 
@@ -221,8 +229,8 @@ export default {
       showSettingDialog: false,
       statistics_object: {
         show_cnt: { name: '出現次數', cnt: 0 },
-        right_cnt: { name: '答對次數', cnt: 0 },
-        error_cnt: { name: '答錯次數', cnt: 0 }
+        right_answer_cnt: { name: '答對次數', cnt: 0 },
+        error_answer_cnt: { name: '答錯次數', cnt: 0 }
       },
       content_object: {
         example: { name: '題目例句', content: '' },
@@ -261,17 +269,19 @@ export default {
       }
     },
     tip () {
+      // 正確答案資料
       this.answer_word = 'vendor'
 
       this.english_translate = this.answer_word[0] + '*'.repeat(this.answer_word.length - 1)
     },
     send () {
+      // 題目,統計資料及內容,還有判斷答案
       if (this.isWrong) {
-        this.statistics_object.error_cnt.cnt++
+        this.statistics_object.error_answer_cnt.cnt++
         this.showAnswer = true
         this.wrong_answer_alert = true
       } else {
-        this.statistics_object.right_cnt.cnt++
+        this.statistics_object.right_answer_cnt.cnt++
         this.right_answer_alert = true
 
         this.content_object.example.content = 'Vendors are busy attracting the attention of children.'
@@ -282,6 +292,7 @@ export default {
       }
     },
     answer () {
+      // 內容資料
       this.english_translate = this.answer_word
 
       this.isClickAnswer = false
@@ -293,6 +304,7 @@ export default {
       this.content_object.note.content = 'note'
     },
     setting () {
+      // 設定資料
       this.showSettingDialog = true
     },
     cooperation () {
@@ -308,6 +320,10 @@ export default {
 
   @import "~vue-material/src/components/MdAnimation/variables";
 
+  .md-layout {
+    padding: 10px 10px 10px 10px;
+  }
+
   .md-layout-item {
     height: 40px;
     margin-top: 10px;
@@ -315,7 +331,7 @@ export default {
     display: flex;
     align-items: center;
     transition: .3s $md-transition-stand-timing;
-    padding: 0px 0px 10px 10px;
+    padding: 0 0 10px 10px;
 
     &:after {
       /*width: 100%;*/
@@ -356,6 +372,10 @@ export default {
     justify-content: flex-start;
   }
 
+  .item-end-style {
+    justify-content: flex-end;
+  }
+
   .md-checkbox {
     display: flex;
   }
@@ -369,7 +389,7 @@ export default {
   }
 
   .md-list {
-    width: 50%;
+    width: 100%;
     max-width: 100%;
     display: inline-block;
     vertical-align: top;
