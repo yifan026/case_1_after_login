@@ -260,8 +260,8 @@ export default {
   }
 
   .md-content {
-    width: 25%;
-    height: 50%;
+    width: 200px;
+    height: 200px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -292,7 +292,7 @@ export default {
   }
 
   .md-list {
-    width: 100%;
+    width: 320px;
     max-width: 100%;
     display: inline-block;
     vertical-align: top;
@@ -301,7 +301,7 @@ export default {
   }
 
   .md-dialog /deep/ .md-dialog-container {
-    max-width: 50%;
+    max-width: 768px;
   }
 
 </style>
