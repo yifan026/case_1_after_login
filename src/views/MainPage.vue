@@ -2,7 +2,7 @@
 
   <div class="md-layout md-gutter">
 
-    <div class="md-layout-item">
+    <div class="md-layout-item  md-alignment-top-left">
       <!--<md-button class="md-raised button-style pink" @click="greet()">選題開始</md-button>-->
 
       <md-button class="md-raised button-style pink" @click="select()">選題開始</md-button>
@@ -21,15 +21,16 @@
       </md-button>
 
       <md-button class="md-raised button-style pink" @click="tip()">提示</md-button>
+
       <div>
 
         <md-dialog-alert
-          :md-active.sync="right_anser_alert"
+          :md-active.sync="right_answer_alert"
           md-content="Right answer"
           md-confirm-text="Cool!"/>
 
         <md-dialog-alert
-          :md-active.sync="wrong_anser_alert"
+          :md-active.sync="wrong_answer_alert"
           md-title="Wrong"
           md-content="Wrong answer!"/>
       </div>
@@ -83,31 +84,38 @@
 
         <md-tabs md-dynamic-height>
           <md-tab md-label="設定">
-            <md-checkbox value="1">只出現近一星期題案</md-checkbox>
+            <div>
+              <md-checkbox value="1">只出現近一星期題案</md-checkbox>
+            </div>
+
           </md-tab>
 
           <md-tab md-label="出題標準">
-            <md-checkbox value="1">允許出現</md-checkbox>
+            <div>
+              <md-checkbox v-model="accept_show_ckx" value="1">允許出現</md-checkbox>
 
               <md-select v-model="accept_show_count" name="accept_show" id="accept_show">
-                <md-option :value='i' v-for='i in accept_count_list'>{{i}}</md-option>
+                <md-option :value="item" v-for='(item) in accept_count_list' v-if="accept_show_ckx"> {{item}}
+                </md-option>
               </md-select>
               次的題目
 
-            <md-checkbox value="0">允許答錯</md-checkbox>
+              <md-checkbox v-model="accept_error_ckx" value="0">允許答錯</md-checkbox>
 
-            <md-select v-model="accept_error_count" name="accept_error" id="accept_error">
-              <md-option :value='i' v-for='i in accept_count_list'>{{i}}</md-option>
-            </md-select>
-            次的題目
+              <md-select v-model="accept_error_count" name="accept_error" id="accept_error">
+                <md-option :value="item" v-for='(item) in accept_count_list' v-if="accept_error_ckx"> {{item}}
+                </md-option>
+              </md-select>
+              次的題目
+            </div>
 
           </md-tab>
 
         </md-tabs>
 
         <md-dialog-actions>
-          <md-button class="md-primary" @click="showSettingDialog = false">Close</md-button>
-          <md-button class="md-primary" @click="showSettingDialog = false">Save</md-button>
+          <md-button class="md-primary" @click="showSettingDialog = false">取消</md-button>
+          <md-button class="md-primary" @click="showSettingDialog = false">設定送出</md-button>
         </md-dialog-actions>
       </md-dialog>
 
@@ -128,13 +136,15 @@ export default {
       part_of_speech: '',
       english_translate: '',
       answer_word: '',
-      accept_count_list: [...Array(11).keys()],
+      accept_count_list: Array.from({ length: 10 }, (_, i) => i + 1),
       isSelect: 0,
       isSend: 0,
       isWrong: true,
+      accept_show_ckx: false,
+      accept_error_ckx: true,
       showAnswer: false,
-      right_anser_alert: false,
-      wrong_anser_alert: false,
+      right_answer_alert: false,
+      wrong_answer_alert: false,
       showSettingDialog: false,
       statistics_object: {
         show_cnt: { name: '出現次數', cnt: 0 },
@@ -152,18 +162,20 @@ export default {
   },
   methods: {
     select () {
+      // 題目及詞性資料
       this.questionChineseTranslateList = ['小販', '叫賣者']
       this.part_of_speech = '名詞'
 
-      for (const s in this.statistics_object) {
-        this.statistics_object[s].cnt = 0
+      // 統計資料
+      for (const so in this.statistics_object) {
+        this.statistics_object[so].cnt = 1
       }
 
       this.chinese_translate = this.questionChineseTranslateList.join(';')
-      this.isSelect = 1
+      // this.isSelect = 1
     },
     tip () {
-      this.answer_word = 'welcome'
+      this.answer_word = 'vendor'
 
       this.english_translate = this.answer_word[0] + '*'.repeat(this.answer_word.length - 1)
     },
@@ -171,18 +183,16 @@ export default {
       if (this.isWrong) {
         this.statistics_object.error_cnt.cnt++
 
-        this.wrong_anser_alert = true
+        this.wrong_answer_alert = true
       } else {
         this.statistics_object.right_cnt.cnt++
-        this.right_anser_alert = true
+        this.right_answer_alert = true
       }
-
-      // return true
     },
     answer () {
       this.english_translate = this.answer_word
 
-      this.content_object.example.content = 'His desires reached.....'
+      this.content_object.example.content = 'Vendors are busy attracting the attention of children.'
 
       this.content_object.source.content = 'http://www.google.com.tw'
 
@@ -195,11 +205,14 @@ export default {
 
     }
 
-  }
+  },
+  computed: {}
 }
 </script>
 
 <style lang="scss" scoped>
+
+  @import "~vue-material/dist/theme/engine";
 
   .md-layout-item {
     height: 100px;
