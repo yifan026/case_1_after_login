@@ -29,7 +29,7 @@
         </div>
 
         <div class="md-layout-item ">
-          <md-input type="text" v-model="english_translate" name="en_msg" :disabled="!isSelect"></md-input>
+          <md-input type="text" v-model="english_translate" name="en_msg" :disabled="!isSelect" ></md-input>
 
         </div>
 
@@ -203,103 +203,105 @@
 </template>
 
 <script>
-  export default {
-    data: function () {
-      return {
-        questionChineseTranslateList: [],
-        chinese_translate: '',
-        part_of_speech: '',
-        english_translate: '',
-        answer_word: '',
-        accept_count_list: [],
-        isSelect: 0,
-        isClickAnswer: true,
-        isSend: 0,
-        isWrong: true,
-        accept_show_ckx: false,
-        accept_error_ckx: false,
-        accept_show_one_week_ckx: false,
-        showAnswer: false,
-        cooperation_active: false,
-        cooperation_value: null,
-        right_answer_alert: false,
-        wrong_answer_alert: false,
-        showSettingDialog: false,
-        statistics_object: {
-          show_cnt: {name: '出現次數', cnt: 0},
-          right_answer_cnt: {name: '答對次數', cnt: 0},
-          error_answer_cnt: {name: '答錯次數', cnt: 0}
-        },
-        content_object: {
-          example: {name: '題目例句', content: ''},
-          source: {name: '題目出處', content: ''},
-          note: {name: '備註', content: ''}
-        },
-        accept_show_count: 1,
-        accept_error_count: 1
+export default {
+  data: function () {
+    return {
+      questionChineseTranslateList: [],
+      chinese_translate: '',
+      part_of_speech: '',
+      english_translate: '',
+      answer_word: '',
+      accept_count_list: [],
+      isSelect: 0,
+      isClickAnswer: true,
+      isSend: 0,
+      isWrong: true,
+      accept_show_ckx: false,
+      accept_error_ckx: false,
+      accept_show_one_week_ckx: false,
+      showAnswer: false,
+      cooperation_active: false,
+      cooperation_value: null,
+      right_answer_alert: false,
+      wrong_answer_alert: false,
+      showSettingDialog: false,
+      statistics_object: {
+        show_cnt: { name: '出現次數', cnt: 0 },
+        right_answer_cnt: { name: '答對次數', cnt: 0 },
+        error_answer_cnt: { name: '答錯次數', cnt: 0 }
+      },
+      content_object: {
+        example: { name: '題目例句', content: '' },
+        source: { name: '題目出處', content: '' },
+        note: { name: '備註', content: '' }
+      },
+      accept_show_count: 1,
+      accept_error_count: 1
+    }
+  },
+  created: function () {
+    this.accept_count_list = Array.from({ length: 10 }, (_, i) => i + 1)
+  },
+  methods: {
+    select () {
+      // 題目及詞性資料
+      this.questionChineseTranslateList = ['小販', '叫賣者']
+      this.part_of_speech = '名詞'
+
+      // 統計資料
+      for (const so in this.statistics_object) {
+        this.statistics_object[so].cnt = 1
+      }
+
+      this.chinese_translate = this.questionChineseTranslateList.join(';')
+
+      this.isSelect = 1
+
+      if (this.isSelect) {
+        this.showAnswer = false
+        this.isClickAnswer = true
+        this.english_translate = ''
+        this.content_object.example.content = ''
+        this.content_object.source.content = ''
+        this.content_object.note.content = ''
       }
     },
-    created: function () {
-      this.accept_count_list = Array.from({length: 10}, (_, i) => i + 1)
+    tip () {
+      // 正確答案資料
+      this.answer_word = 'vendor'
+
+      this.english_translate = this.answer_word[0] + '*'.repeat(this.answer_word.length - 1)
     },
-    methods: {
-      select () {
-        // 題目及詞性資料
-        this.questionChineseTranslateList = ['小販', '叫賣者']
-        this.part_of_speech = '名詞'
+    send () {
+      // 題目,統計資料及內容,還有判斷答案
 
-        // 統計資料
-        for (const so in this.statistics_object) {
-          this.statistics_object[so].cnt = 1
-        }
-
-        this.chinese_translate = this.questionChineseTranslateList.join(';')
-
-        this.isSelect = 1
-
-        if (this.isSelect) {
-          this.showAnswer = false
-          this.isClickAnswer = true
-          this.english_translate = ''
-          this.content_object.example.content = ''
-          this.content_object.source.content = ''
-          this.content_object.note.content = ''
-        }
-      },
-      tip () {
-        // 正確答案資料
-        this.answer_word = 'vendor'
-
-        this.english_translate = this.answer_word[0] + '*'.repeat(this.answer_word.length - 1)
-      },
-      send () {
-        // 題目,統計資料及內容,還有判斷答案
-        if (this.isWrong) {
-          this.statistics_object.error_answer_cnt.cnt++
-          this.showAnswer = true
-          this.wrong_answer_alert = true
-        } else {
-          this.statistics_object.right_answer_cnt.cnt++
-          this.right_answer_alert = true
-
-          this.content_object.example.content = 'Vendors are busy attracting the attention of children.'
-
-          this.content_object.source.content = 'http://www.google.com.tw'
-
-          this.content_object.note.content = 'note'
-        }
-      },
-      answer () {
-        // 內容資料
-        this.english_translate = this.answer_word
-
-        this.isClickAnswer = false
+      if (this.isWrong) {
+        this.statistics_object.error_answer_cnt.cnt++
+        this.showAnswer = true
+        this.wrong_answer_alert = true
+      } else {
+        this.statistics_object.right_answer_cnt.cnt++
+        this.right_answer_alert = true
 
         this.content_object.example.content = 'Vendors are busy attracting the attention of children.'
 
         this.content_object.source.content = 'http://www.google.com.tw'
 
-        this.content_object.note.content = '話說圓音寺橫樑上一隻蜘蛛因聽佛祖講經而有了佛性，一心想修成人形\n' +
+        this.content_object.note.content = 'note'
+      }
+    },
+    answer () {
+      // 內容資料
+
+      this.english_translate = this.answer_word
+
+      this.isClickAnswer = false
+
+      this.content_object.example.content = 'Vendors are busy attracting the attention of children.'
+
+      this.content_object.source.content = 'http://www.google.com.tw'
+
+      this.content_object.note.content = '話說圓音寺橫樑上一隻蜘蛛因聽佛祖講經而有了佛性，一心想修成人形\n' +
           '佛祖有心渡牠，便開口對蜘蛛說：「你即已有靈犀，那我來問你，你認為人生最珍貴的東西是什麼？」\n' +
           '蜘蛛不假思索的回答：「人生最珍貴的東西是得不到。」\n' +
           '佛祖笑笑不再理會牠了。\n' +
@@ -318,18 +320,18 @@
           '「唯吾知足」最早出現在漢朝的古錢幣上面，微妙之處就在於這四個字上、下、左、右共用一個口字，所以後人又稱它「藉口錢」。\n' +
           '而為什麼如此蘊涵禪理的四個字會最早出現在人人夢寐以求、不可或缺的錢幣上呢？\n' +
           '也許這也正是佛祖給出的一個禪機吧。'
-      },
-      setting () {
-        // 設定資料
-        this.showSettingDialog = true
-      },
-      cooperation () {
-        this.cooperation_active = true
-      }
-
     },
-    computed: {}
-  }
+    setting () {
+      // 設定資料
+      this.showSettingDialog = true
+    },
+    cooperation () {
+      this.cooperation_active = true
+    }
+
+  },
+  computed: {}
+}
 </script>
 
 <style lang="scss" scoped>
