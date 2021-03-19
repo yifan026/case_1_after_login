@@ -1,9 +1,8 @@
 <template>
 
-  <!--<div class="md-layout md-gutter md-alignment-center">-->
   <div>
     <!--選題-->
-    <div class="md-layout md-size-90">
+    <div class="md-layout">
       <div class="md-layout">
         <div class="md-layout-item item-end-style">
 
@@ -23,7 +22,7 @@
     </div>
 
     <!--輸入-->
-    <div class="md-layout md-size-90">
+    <div class="md-layout">
       <div class="md-layout">
         <div class="md-layout-item item-end-style">
           <span>請輸入英譯 : </span>
@@ -142,29 +141,28 @@
               <div class="md-layout-item">
                 <md-checkbox v-model="accept_show_ckx" value="1">允許出現</md-checkbox>
               </div>
-              <div class="md-layout-item">
+              <div class="md-layout-item md-size-15">
                 <md-field>
                   <md-select v-model="accept_show_count" name="accept_show" id="accept_show"
                              :disabled="!accept_show_ckx">
-                    <md-option :value="item" v-for='(item, index) in accept_count_list' :key="index"
-                               style="text-align: center"> {{item}}
+                    <md-option :value="item" v-for='(item, index) in accept_count_list' :key="index"> {{item}}
                     </md-option>
                   </md-select>
                 </md-field>
               </div>
-              <div class="md-layout-item">
+              <div class="md-layout-item item-end-style">
                 <span>次的題目</span>
               </div>
 
             </div>
-            <div class="md-layout">
+            <div class="md-layout ">
 
               <div class="md-layout-item">
                 <md-checkbox v-model="accept_error_ckx" value="0">允許答錯</md-checkbox>
 
               </div>
 
-              <div class="md-layout-item">
+              <div class="md-layout-item md-size-15">
                 <md-field>
                   <md-select v-model="accept_error_count" name="accept_error" id="accept_error"
                              :disabled="!accept_error_ckx">
@@ -175,7 +173,7 @@
 
               </div>
 
-              <div class="md-layout-item">
+              <div class="md-layout-item item-end-style">
                 <span>次的題目</span>
               </div>
 
@@ -301,7 +299,25 @@ export default {
 
       this.content_object.source.content = 'http://www.google.com.tw'
 
-      this.content_object.note.content = 'note'
+      this.content_object.note.content = '話說圓音寺橫樑上一隻蜘蛛因聽佛祖講經而有了佛性，一心想修成人形\n' +
+          '佛祖有心渡牠，便開口對蜘蛛說：「你即已有靈犀，那我來問你，你認為人生最珍貴的東西是什麼？」\n' +
+          '蜘蛛不假思索的回答：「人生最珍貴的東西是得不到。」\n' +
+          '佛祖笑笑不再理會牠了。\n' +
+          '就此過了一千年，蜘蛛仍舊天天聽禪誦經，盼望有一天能修得人形。\n' +
+          '突然有一天一滴甘露滴在蛛網上，看著這一滴晶瑩剔透的露珠，蜘蛛動了凡心。\n' +
+          '正當牠慢慢接近露珠時，一陣長風把露珠吹走。\n' +
+          '蜘蛛望風長嘆，從此無心向佛，愁容滿面。\n' +
+          '此時佛祖又開口問蜘蛛：「你認為人生最珍貴的東西是什麼？」\n' +
+          '蜘蛛嘆了一口氣回答：「人生最珍惜的東西是已失去。」\n' +
+          '佛祖笑笑說：「好吧，蛛兒，我就讓你到人世去走一遭吧。」\n' +
+          '百年轉眼即逝，佛祖再次出現已是蛛兒在人間彌留之時。\n' +
+          '佛祖再次提問：「蛛兒，你認為人生最珍貴的東西是什麼？」\n' +
+          '此時白髮滿頭的蛛兒才恍然領悟：「人生百年就如長風吹走甘露，一切心中慾望之物皆為鏡像。\n' +
+          '最珍貴之物也不過平常之物，而平常之物反倒是最珍貴之物。\n' +
+          '願來世我仍能做圓音寺橫樑上的一隻蜘蛛，天天聽禪誦經，唯吾知足。」\n' +
+          '「唯吾知足」最早出現在漢朝的古錢幣上面，微妙之處就在於這四個字上、下、左、右共用一個口字，所以後人又稱它「藉口錢」。\n' +
+          '而為什麼如此蘊涵禪理的四個字會最早出現在人人夢寐以求、不可或缺的錢幣上呢？\n' +
+          '也許這也正是佛祖給出的一個禪機吧。'
     },
     setting () {
       // 設定資料
@@ -318,7 +334,7 @@ export default {
 
 <style lang="scss" scoped>
 
-  @import "~vue-material/src/components/MdAnimation/variables";
+  /*@import "~vue-material/src/components/MdAnimation/variables";*/
 
   .md-layout {
     padding: 10px 10px 10px 10px;
@@ -330,7 +346,7 @@ export default {
     margin-bottom: 10px;
     display: flex;
     align-items: center;
-    transition: .3s $md-transition-stand-timing;
+    /*transition: .3s $md-transition-stand-timing;*/
     padding: 0 0 10px 10px;
 
     &:after {
@@ -376,15 +392,16 @@ export default {
     justify-content: flex-end;
   }
 
+  .item-center-style {
+    justify-content: center;
+  }
+
   .md-checkbox {
     display: flex;
   }
 
   .md-button {
     font-size: 16px;
-  }
-
-  .md-button {
     text-transform: capitalize !important; /*For Lower case use lowercase*/
   }
 
@@ -398,8 +415,13 @@ export default {
   }
 
   .md-dialog /deep/ .md-dialog-container {
-    max-width: 768px;
+    /*width: 50%;*/
+    max-width: 100%;
   }
+
+  /*.md-menu.md-select .md-input .md-field.md-has-value {*/
+    /*text-align: center;*/
+  /*}*/
 
   input[type="text"] {
     border-radius: 5px;

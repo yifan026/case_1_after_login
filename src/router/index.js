@@ -12,7 +12,7 @@ const routes = [
   //   component: Home
   // },
   {
-    path: '/main_page',
+    path: '/',
     name: 'Main',
     component: AfterLogin
   }
