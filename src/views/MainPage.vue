@@ -32,17 +32,19 @@
     <!--題目中譯-->
     <div class="md-layout">
 
-      <div class="md-layout-item md-size-60">
-        <span>題目中譯 : </span> <b>{{chinese_translate}}</b>
+      <div class="md-layout-item md-size-25">
+        <span>題目中譯 : </span>
       </div>
-      <div class="md-layout-item">
+      <div class="md-layout-item item-right-style md-size-60">
+        <b>{{chinese_translate}}</b>
+      </div>
+      <div class="md-layout-item item-center-style md-size-15">
         <b style="color: red">{{part_of_speech}}</b>
       </div>
     </div>
     <!--英譯-->
     <div class="md-layout">
       <div class="md-layout-item">
-
         <span>請輸入英譯 : </span>
       </div>
     </div>
@@ -244,7 +246,7 @@ export default {
   methods: {
     select () {
       // 題目及詞性資料
-      this.questionChineseTranslateList = ['小販', '叫賣者']
+      this.questionChineseTranslateList = ['小販', '叫賣者', '攤主', '賣主']
       this.part_of_speech = '名詞'
 
       // 統計資料
@@ -385,7 +387,7 @@ export default {
   }
 
   .button-style {
-    height: 30px;
+    height: 25px;
     margin: 0px 0px 5px 10px !important;
     border-radius: 4px;
     min-width: 100px;
