@@ -337,6 +337,8 @@ export default {
 <style lang="scss" scoped>
 
   /*@import "~vue-material/src/components/MdAnimation/variables";*/
+  @import "../../public/default.css";
+  @import "../../public/vue-material.min.css";
 
   .md-layout {
     padding: 0px 10px 5px 10px;
