@@ -255,7 +255,6 @@ export default {
       }
 
       this.chinese_translate = this.questionChineseTranslateList.join(';')
-
       this.isSelect = 1
 
       if (this.isSelect) {
