@@ -1,94 +1,110 @@
 <template>
 
   <div>
+    <!--統計-->
+    <div class="md-layout">
+
+      <div class="md-layout-item" style="font-size: 25px">統計</div>
+
+      <div class="md-layout-item item-end-style">
+        <md-button class="md-raised button-style pink" @click="cooperation()">合作洽談</md-button>
+      </div>
+    </div>
+    <!--統計內容-->
+    <div class="md-layout">
+      <div class="md-layout-item" v-for="(value,index) in statistics_object" :key="index">
+
+         <span class="md-list-item-text"
+               v-bind:style="[index.includes('answer') ? index.includes('right') ? {color:'blue'}:{color:'red'}:{color:'black'}]">{{value.name }} : {{value.cnt}}</span>
+
+      </div>
+
+    </div>
     <!--選題-->
     <div class="md-layout">
-      <div class="md-layout">
-        <div class="md-layout-item item-end-style">
 
-          <md-button class="md-raised button-style pink" @click="select()">選題開始</md-button>
+      <div class="md-layout-item">
 
-        </div>
-
-        <div class="md-layout-item item-right-style">
-          <span>題目中譯 : </span> <b>{{chinese_translate}}</b>
-        </div>
-
-        <div class="md-layout-item item-right-style">
-          <b style="color: red">{{part_of_speech}}</b>
-        </div>
+        <md-button class="md-raised button-style pink" @click="select()">選題開始</md-button>
 
       </div>
     </div>
-
-    <!--輸入-->
+    <!--題目中譯-->
     <div class="md-layout">
-      <div class="md-layout">
-        <div class="md-layout-item item-end-style">
-          <span>請輸入英譯 : </span>
-        </div>
 
-        <div class="md-layout-item ">
-          <md-input type="text" v-model="english_translate" name="en_msg" :disabled="!isSelect" ></md-input>
-
-        </div>
-
-        <div class="md-layout-item">
-          <md-button class="md-raised button-style pink" @click="answer()" v-if='showAnswer'>解答
-          </md-button>
-        </div>
-
-        <div class="md-layout-item">
-          <md-button class="md-raised button-style pink" @click="tip()"
-                     :class="{pink: isClickAnswer, gray: !isClickAnswer || !chinese_translate}"
-                     :disabled="!isClickAnswer || !chinese_translate">提示
-          </md-button>
-        </div>
-
-        <!--送出後的彈窗-->
-        <div>
-
-          <md-dialog-alert
-            :md-active.sync="right_answer_alert"
-            md-content="Right answer"
-            md-confirm-text="Cool!"/>
-
-          <md-dialog-alert
-            :md-active.sync="wrong_answer_alert"
-            md-title="Wrong"
-            md-content="Wrong answer!"/>
-        </div>
-
-        <div class="md-layout-item">
-          <md-button class="md-raised md-accent button-style pink"
-                     :class="{pink: isClickAnswer, gray: !isClickAnswer || !english_translate}"
-                     @click="send()" :disabled="!isClickAnswer || !english_translate">送出
-          </md-button>
-        </div>
-
-        <div class="md-layout-item">
-          <md-button class="md-raised button-style pink" @click="cooperation()">合作洽談</md-button>
-        </div>
-
-        <!--合作洽談後的彈窗-->
-        <div>
-
-          <md-dialog-prompt
-            :md-active.sync="cooperation_active"
-            v-model="cooperation_value"
-            md-title="Memo"
-            md-input-maxlength="50"
-            md-input-placeholder="Type your content"
-            md-confirm-text="Done"/>
-        </div>
-
+      <div class="md-layout-item md-size-60">
+        <span>題目中譯 : </span> <b>{{chinese_translate}}</b>
+      </div>
+      <div class="md-layout-item">
+        <b style="color: red">{{part_of_speech}}</b>
       </div>
     </div>
+    <!--英譯-->
+    <div class="md-layout">
+      <div class="md-layout-item">
 
+        <span>請輸入英譯 : </span>
+      </div>
+    </div>
+    <!--輸入英譯-->
+    <div class="md-layout">
+      <div class="md-layout-item">
+
+        <md-input type="text" v-model="english_translate" name="en_msg" :disabled="!isSelect"></md-input>
+
+      </div>
+
+    </div>
+    <!--送出-->
+    <div class="md-layout">
+      <div class="md-layout-item button-margin">
+        <md-button class="md-raised button-style pink" @click="answer()" v-if='showAnswer'>解答
+        </md-button>
+      </div>
+
+      <div class="md-layout-item">
+        <md-button class="md-raised button-style pink" @click="tip()"
+                   :class="{pink: isClickAnswer, gray: !isClickAnswer || !chinese_translate}"
+                   :disabled="!isClickAnswer || !chinese_translate">提示
+        </md-button>
+      </div>
+
+      <!--送出後的彈窗-->
+      <div>
+
+        <md-dialog-alert
+          :md-active.sync="right_answer_alert"
+          md-content="Right answer"
+          md-confirm-text="Cool!"/>
+
+        <md-dialog-alert
+          :md-active.sync="wrong_answer_alert"
+          md-title="Wrong"
+          md-content="Wrong answer!"/>
+      </div>
+
+      <div class="md-layout-item">
+        <md-button class="md-raised md-accent button-style pink"
+                   :class="{pink: isClickAnswer, gray: !isClickAnswer || !english_translate}"
+                   @click="send()" :disabled="!isClickAnswer || !english_translate">送出
+        </md-button>
+      </div>
+
+      <!--合作洽談後的彈窗-->
+      <div>
+
+        <md-dialog-prompt
+          :md-active.sync="cooperation_active"
+          v-model="cooperation_value"
+          md-title="Memo"
+          md-input-maxlength="50"
+          md-input-placeholder="Type your content"
+          md-confirm-text="Done"/>
+      </div>
+
+    </div>
     <!--內容-->
     <div class="md-layout">
-      <!--<md-content class="md-primary">-->
-
       <md-list>
         <md-subheader>內容</md-subheader>
         <md-list-item v-for="(value,index) in content_object" :key="index">
@@ -105,23 +121,6 @@
       <!--</md-content>-->
 
     </div>
-
-    <!--統計-->
-    <div class="md-layout">
-
-      <md-list>
-        <md-subheader>統計</md-subheader>
-
-        <md-list-item v-for="(value,index) in statistics_object" :key="index">
-
-          <span class="md-list-item-text"
-                v-bind:style="[index.includes('answer') ? index.includes('right') ? {color:'blue'}:{color:'red'}:{color:'black'}]">{{value.name }} : {{value.cnt}}</span>
-
-        </md-list-item>
-      </md-list>
-
-    </div>
-
     <!--設定-->
     <div class="md-layout">
 
@@ -138,7 +137,7 @@
 
           <md-tab md-label="出題標準">
             <div class="md-layout">
-              <div class="md-layout-item">
+              <div class="md-layout-item md-size-50">
                 <md-checkbox v-model="accept_show_ckx" value="1">允許出現</md-checkbox>
               </div>
               <div class="md-layout-item md-size-15">
@@ -157,7 +156,7 @@
             </div>
             <div class="md-layout ">
 
-              <div class="md-layout-item">
+              <div class="md-layout-item md-size-50">
                 <md-checkbox v-model="accept_error_ckx" value="0">允許答錯</md-checkbox>
 
               </div>
@@ -339,17 +338,23 @@ export default {
   /*@import "~vue-material/src/components/MdAnimation/variables";*/
 
   .md-layout {
-    padding: 10px 10px 10px 10px;
+    padding: 0px 10px 5px 10px;
+  }
+
+  .button-margin {
+    /*margin-left: 0px;*/
+    /*margin-bottom: 20px;*/
+    padding: 0px 0px 0px 0px;
   }
 
   .md-layout-item {
-    height: 40px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    height: 30px;
+    margin-top: 2px;
+    margin-bottom: 2px;
     display: flex;
     align-items: center;
     /*transition: .3s $md-transition-stand-timing;*/
-    padding: 0 0 10px 10px;
+    /*padding: 0 0 10px 10px;*/
 
     &:after {
       /*width: 100%;*/
@@ -380,8 +385,8 @@ export default {
   }
 
   .button-style {
-    height: 40px;
-    margin: 0 0 0 20px !important;
+    height: 30px;
+    margin: 0px 0px 5px 10px !important;
     border-radius: 4px;
     min-width: 100px;
   }
@@ -410,6 +415,7 @@ export default {
   .md-list {
     width: 100%;
     max-width: 100%;
+    /*height: 180px;*/
     display: inline-block;
     vertical-align: top;
     border: 1px solid rgba(#000, .12);
