@@ -50,12 +50,11 @@
     </div>
     <!--輸入英譯-->
     <div class="md-layout">
-      <div class="md-layout-item">
-
+      <div class="md-layout-item md-size-50">
+        <md-field >
         <md-input type="text" v-model="english_translate" name="en_msg" :disabled="!isSelect"></md-input>
-
+        </md-field>
       </div>
-
     </div>
     <!--送出-->
     <div class="md-layout">
@@ -337,8 +336,8 @@ export default {
 <style lang="scss" scoped>
 
   /*@import "~vue-material/src/components/MdAnimation/variables";*/
-  @import "../../public/default.css";
-  @import "../../public/vue-material.min.css";
+  /*@import "../../public/default.css";*/
+  /*@import "../../public/vue-material.min.css";*/
 
   .md-layout {
     padding: 0px 10px 5px 10px;
