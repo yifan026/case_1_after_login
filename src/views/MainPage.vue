@@ -50,12 +50,11 @@
     </div>
     <!--輸入英譯-->
     <div class="md-layout">
-      <div class="md-layout-item">
-
+      <div class="md-layout-item md-size-70">
+        <md-field >
         <md-input type="text" v-model="english_translate" name="en_msg" :disabled="!isSelect"></md-input>
-
+        </md-field>
       </div>
-
     </div>
     <!--送出-->
     <div class="md-layout">
