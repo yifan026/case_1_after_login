@@ -131,7 +131,7 @@
         <md-tabs md-dynamic-height>
           <md-tab md-label="設定">
             <div class="md-layout-item">
-              <md-checkbox v-model="accept_show_one_week_ckx" value="2">只出現近一星期題案</md-checkbox>
+              <md-checkbox v-model="accept_show_one_week_ckx">只出現近一星期題案</md-checkbox>
             </div>
 
           </md-tab>
@@ -139,7 +139,7 @@
           <md-tab md-label="出題標準">
             <div class="md-layout">
               <div class="md-layout-item md-size-50">
-                <md-checkbox v-model="accept_show_ckx" value="1">允許出現</md-checkbox>
+                <md-checkbox v-model="accept_show_ckx">允許出現</md-checkbox>
               </div>
               <div class="md-layout-item md-size-15">
                 <md-field>
@@ -158,7 +158,7 @@
             <div class="md-layout ">
 
               <div class="md-layout-item md-size-50">
-                <md-checkbox v-model="accept_error_ckx" value="0">允許答錯</md-checkbox>
+                <md-checkbox v-model="accept_error_ckx">允許答錯</md-checkbox>
 
               </div>
 
@@ -240,6 +240,9 @@ export default {
     }
   },
   created: function () {
+    this.accept_show_ckx = true
+    this.accept_error_ckx = true
+    // this.accept_show_count = 5
     this.accept_count_list = Array.from({ length: 10 }, (_, i) => i + 1)
   },
   methods: {
