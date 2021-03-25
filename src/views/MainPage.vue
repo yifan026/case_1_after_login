@@ -10,8 +10,9 @@
         <md-button class="md-raised button-style pink" @click="cooperation()">合作洽談</md-button>
       </div>
     </div>
+
     <!--統計內容-->
-    <div class="md-layout">
+    <div class="md-laloginyout">
       <div class="md-layout-item" v-for="(value,index) in statistics_object" :key="index">
 
          <span class="md-list-item-text"
@@ -20,6 +21,7 @@
       </div>
 
     </div>
+
     <!--選題-->
     <div class="md-layout">
 
@@ -29,6 +31,7 @@
 
       </div>
     </div>
+
     <!--題目中譯-->
     <div class="md-layout">
 
@@ -42,20 +45,23 @@
         <b style="color: red">{{part_of_speech}}</b>
       </div>
     </div>
+
     <!--英譯-->
     <div class="md-layout">
       <div class="md-layout-item">
         <span>請輸入英譯 : </span>
       </div>
     </div>
+
     <!--輸入英譯-->
     <div class="md-layout">
       <div class="md-layout-item md-size-70">
-        <md-field >
-        <md-input type="text" v-model="english_translate" name="en_msg" :disabled="!isSelect"></md-input>
+        <md-field>
+          <md-input type="text" v-model="english_translate" name="en_msg" :disabled="!isSelect"></md-input>
         </md-field>
       </div>
     </div>
+
     <!--送出-->
     <div class="md-layout">
       <div class="md-layout-item button-margin">
@@ -100,10 +106,12 @@
           md-title="Memo"
           md-input-maxlength="50"
           md-input-placeholder="Type your content"
-          md-confirm-text="Done"/>
+          md-confirm-text="Done"
+        />
       </div>
 
     </div>
+
     <!--內容-->
     <div class="md-layout">
       <md-list>
@@ -122,6 +130,7 @@
       <!--</md-content>-->
 
     </div>
+
     <!--設定-->
     <div class="md-layout">
 
@@ -240,9 +249,6 @@ export default {
     }
   },
   created: function () {
-    this.accept_show_ckx = true
-    this.accept_error_ckx = true
-    // this.accept_show_count = 5
     this.accept_count_list = Array.from({ length: 10 }, (_, i) => i + 1)
   },
   methods: {
@@ -329,6 +335,8 @@ export default {
     },
     cooperation () {
       this.cooperation_active = true
+
+      console.log('cooperation', this.cooperation_value)
     }
 
   },
